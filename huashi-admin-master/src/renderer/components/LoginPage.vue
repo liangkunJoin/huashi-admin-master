@@ -1,0 +1,149 @@
+<template>
+    <div class="login" :style="backgroundDiv" >
+        <div class="login-box">
+            <div class="logo">
+                <img src="static/images/logo.jpg"/>
+            </div>
+            <div class="body">
+                <p class="tips">花食后台管理</p>
+                <el-form ref="form" :model="form" :rules="rules" label-position="top">
+                    <el-form-item label="" prop="username">
+                        <el-input v-model="form.username" placeholder="用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item label="" prop="password">
+                        <el-input type="password" v-model="form.password" placeholder="密码"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="startLogin" :loading="loading" style="width: 100%;">
+                            {{ loading ? '登录中...' : '登录' }}
+                        </el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    import qs from 'qs';
+
+    export default {
+        data() {
+            return {
+                form: {
+                    username: '',
+                    password: '',
+                },
+                rules: {
+                    username: [
+                        {required: true, message: '请输入用户名', trigger: 'blur'},
+                    ],
+                    password: [
+                        {required: true, message: '请输入密码', trigger: 'blur'},
+                        {min: 6, message: '密码不得低于6个字符', trigger: 'blur'},
+                    ],
+                },
+                loading: false,
+                backgroundDiv: {
+                    backgroundImage: 'url(' + require('../../../static/images/background.jpg') + ')',
+                }
+            }
+        },
+        components: {},
+        methods: {
+            startLogin() {
+                this.$refs['form'].validate((valid) => {
+                    if (!valid) {
+                        return false;
+                    }
+                    this.loading = true;
+                    this.axios.post('/api/huashi-cloud-customer/admin/userLogin', qs.stringify({
+                        userName: this.form.username,
+                        password: this.form.password
+                    }),{                      
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                        }                    
+                    }).then((res) => {             
+                        this.loading = false;
+                        if (res.data.code == 1) {
+                            localStorage.setItem('token', res.data.data.sessionId);
+                            localStorage.setItem('userInfo', res.data.data);
+                            this.$router.push({name: 'dashboard'});
+
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                title: res.data.errmsg
+                            })
+                        }
+
+                    }).catch((err) => {                       
+                        this.loading = false;
+                    })
+
+                });
+            } 
+        }
+    }
+</script>
+<style>
+    .login {
+        align-items: center;
+        background-size: 100% auto; 
+        background-repeat: no-repeat; 
+        background-attachment: fixed;
+        background-size: cover;
+        display: flex;
+        font-family: Lato, Helvetica, sans-serif;
+        justify-content: center;
+        text-align: center;
+        height: 100%;
+        width: 100%;
+        color: #656565;
+    }
+
+    .login-box {
+        width: 320px;
+        height: 350px;
+        background: #fff;
+    }
+
+    .login-box .logo {
+        height: 54px;
+        background: #324157;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-box .logo img {
+        max-height: 30px;
+    }
+
+    .login-box .body {
+        padding: 15px;
+    }
+
+    .login-box .body .tips {
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .login-box .body .author {
+        display: block;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #656565;
+        margin-bottom: 10px;
+        text-decoration: none;
+    }
+
+    .login-box .body .author a {
+        text-decoration: none;
+    }
+</style>
