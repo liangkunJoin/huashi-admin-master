@@ -29,28 +29,28 @@
                     </el-table-column>
                     <el-table-column prop="name" label="商品名称">
                     </el-table-column>
-                    <el-table-column prop="category_name" label="所属分类">
+                    <el-table-column prop="categoryId" label="所属分类">
                     </el-table-column>
-                    <el-table-column prop="retail_price" label="售价" width="120">
+                    <el-table-column prop="retailPrice" label="售价" width="120">
                     </el-table-column>
-                    <el-table-column prop="goods_number" label="库存" width="120">
+                    <el-table-column prop="goodsNumber" label="库存" width="120">
                     </el-table-column>
-                    <el-table-column prop="is_new" label="新品" width="80">
+                    <el-table-column prop="isNew" label="新品" width="80">
                         <template scope="scope">
-                            {{ scope.row.is_new == 1 ? '是' : '否' }}
+                            {{ scope.row.isNew == true ? '是' : '否' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="is_new" label="人气" width="80">
+                    <el-table-column prop="isHot" label="人气" width="80">
                         <template scope="scope">
-                            {{ scope.row.is_hot == 1 ? '是' : '否' }}
+                            {{ scope.row.isHot == true ? '是' : '否' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="is_show" label="上架" width="80">
+                    <el-table-column prop="isOnSale" label="上架" width="80">
                         <template scope="scope">
-                            {{ scope.row.is_on_sale == 1 ? '是' : '否' }}
+                            {{ scope.row.isOnSale == true ? '是' : '否' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort_order" label="排序" width="80">
+                    <el-table-column prop="sortOrder" label="排序" width="80">
                     </el-table-column>
                     <el-table-column label="操作" width="140">
                         <template scope="scope">
@@ -120,13 +120,13 @@
         this.getList()
       },
       getList() {
-        this.axios.get('goods', {
+        this.axios.get('/api/huashi-cloud-customer/admin/goods/goodsList', {
           params: {
             page: this.page,
             name: this.filterForm.name
           }
         }).then((response) => {
-          this.tableData = response.data.data.data
+          this.tableData = response.data.data.val
           this.page = response.data.data.currentPage
           this.total = response.data.data.count
         })

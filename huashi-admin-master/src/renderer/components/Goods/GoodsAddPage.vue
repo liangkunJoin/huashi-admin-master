@@ -17,22 +17,22 @@
             <el-input v-model="infoForm.id"></el-input>
             <div class="form-tip">商品ID,如:1234567; 添加商品的时候手动填写，值同商品sn一致，<font color="red">修改商品信息时，请勿修改</font></div>
           </el-form-item> -->
-          <el-form-item label="商品sn" prop="goods_sn">
+          <!-- <el-form-item label="商品sn" prop="goods_sn">
             <el-input v-model="infoForm.goods_sn"></el-input>
             <div class="form-tip">商品sn,如:1234567; 添加商品的时候手动填写，值同商品ID一致，<font color="red">修改商品信息时，请勿修改</font></div>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="商品名称" prop="name">
             <el-input v-model="infoForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="商品价格" prop="retail_price">
-            <el-input v-model="infoForm.retail_price"></el-input>
+          <el-form-item label="商品价格" prop="retailPrice">
+            <el-input v-model="infoForm.retailPrice"></el-input>
           </el-form-item>
           <!-- <el-form-item label="所属分类">
             <el-cascader :options="options" placeholder="请选择分类" v-model="selectedOptions" @change="handleChange">
             </el-cascader>
           </el-form-item> -->
-          <el-form-item label="所属分类" prop="category_id">
-             <el-select v-model="infoForm.category_name" value-key="id" filterable placeholder="请选择" @change="handleSelectChage">
+          <el-form-item label="所属分类" prop="categorId">
+             <el-select v-model="infoForm.categoryName" value-key="id" filterable placeholder="请选择" @change="handleSelectChage">
               <el-option
                 v-for="item in infoForm.allCategory"
                 :key="item.id"
@@ -45,17 +45,17 @@
               <el-option label="宝马" value="beijing"></el-option>
             </el-select> -->
           </el-form-item>
-          <el-form-item label="商品图片" prop="list_pic_url">
-            <el-upload class="image-uploader-diy" name="brand_pic"
+          <el-form-item label="商品图片" prop="listPicUrl">
+            <el-upload class="image-uploader-diy" name="brandPic"
                        action="http://127.0.0.1:8360/admin/upload/brandPic" :show-file-list="true"
                        :on-success="handleUploadImageSuccess" :headers="uploaderHeader">
-              <img v-if="infoForm.list_pic_url" :src="infoForm.list_pic_url" class="image-show">
+              <img v-if="infoForm.listPicUrl" :src="infoForm.listPicUrl" class="image-show">
               <i v-else class="el-icon-plus image-uploader-icon"></i>
             </el-upload>
             <div class="form-tip">图片尺寸：800*800</div>
           </el-form-item>
-          <el-form-item label="商品简介" prop="goods_brief">
-            <el-input type="textarea" v-model="infoForm.goods_brief" :rows="3"></el-input>
+          <el-form-item label="商品简介" prop="goodsBrief">
+            <el-input type="textarea" v-model="infoForm.goodsBrief" :rows="3"></el-input>
             <div class="form-tip"></div>
           </el-form-item>
           <!-- <el-form-item label="商品详情" prop="goods_desc">
@@ -65,7 +65,7 @@
           </el-form-item> -->
 
           <!-- 图片上传组件辅助-->
-          <el-upload class="avatar-uploader" name="goods_detail_pic"
+          <el-upload class="avatar-uploader" name="goodsDetailPic"
                   action="http://127.0.0.1:8360/admin/upload/goodsDetailPic" :show-file-list="false"
                   :on-success="handleUploadImageSuccess" :headers="uploaderHeader" 
                   :before-upload="beforeUpload" :on-error="uploadError">
@@ -77,9 +77,9 @@
             <div class="form-tip">引用网络图片辅助工具，先确定将图片插入商品详情的位置，让其获得焦点，然后复制网络图片地址到当前输入框，之后点击确定</div>
           </el-form-item>
           
-          <el-form-item label="商品详情" prop="goods_desc">
+          <el-form-item label="商品详情" prop="goodsDesc">
             <div class="edit_container">
-              <quill-editor v-model="infoForm.goods_desc"
+              <quill-editor v-model="infoForm.goodsDesc"
                   ref="myTextEditor"
                   class="editer"
                   :options="editorOption" 
@@ -89,22 +89,22 @@
               </quill-editor>
             </div>
           </el-form-item>
-          <el-form-item label="规格/库存" prop="goods_number">
-            <el-input v-model="infoForm.goods_number"></el-input>
+          <el-form-item label="规格/库存" prop="goodsNumber">
+            <el-input v-model="infoForm.goodsNumber"></el-input>
           </el-form-item>
           <el-form-item label="推荐类型">
-            <el-checkbox-group v-model="infoForm.is_new">
-              <el-checkbox label="新品" name="is_new" ></el-checkbox>
+            <el-checkbox-group v-model="infoForm.isNew">
+              <el-checkbox label="新品" name="isNew" ></el-checkbox>
             </el-checkbox-group>
-            <el-checkbox-group v-model="infoForm.is_hot">
-              <el-checkbox label="人气" name="is_hot"></el-checkbox>
+            <el-checkbox-group v-model="infoForm.isHot">
+              <el-checkbox label="人气" name="isHot"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="上架">
-            <el-switch on-text="上架" off-text="下架" on-value="1" off-value="0" v-model="infoForm.is_on_sale"></el-switch>
+            <el-switch on-text="上架" off-text="下架" on-value="1" off-value="0" v-model="infoForm.isOnSale"></el-switch>
           </el-form-item>
           <el-form-item label="排序" prop="sort_order">
-            <el-input-number v-model="infoForm.sort_order" :min="1" :max="1000"></el-input-number>
+            <el-input-number v-model="infoForm.sortOrder" :min="1" :max="1000"></el-input-number>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmitInfo">确定保存</el-button>
@@ -286,16 +286,16 @@
 
         //加载商品详情
         let that = this
-        this.axios.get('goods/info', {
+        this.axios.get('/api/huashi-cloud-customer/admin/goods/getGoodsInfo', {
           params: {
             id: that.infoForm.id
           }
         }).then((response) => {
           let resInfo = response.data.data;
-          resInfo.is_new = resInfo.is_new ? true : false;
-          resInfo.is_show = resInfo.is_show ? true : false;
-          resInfo.is_hot = resInfo.is_hot ? true : false;
-          resInfo.is_on_sale = resInfo.is_on_sale ? "1" : "0";
+          resInfo.isNew = resInfo.isNew ? true : false;
+          resInfo.isShow = resInfo.isShow ? true : false;
+          resInfo.isHot = resInfo.isHot ? true : false;
+          resInfo.isOnSale = resInfo.isOnSale ? "1" : "0";
           that.infoForm = resInfo;
 
           // 初始化 summernote
