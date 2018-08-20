@@ -19,7 +19,7 @@ import 'quill/dist/quill.bubble.css'
 // import 'bootstrap/js/modal.js'
 // import 'bootstrap/js/dropdown.js'
 // import 'bootstrap/js/tooltip.js'
-// // import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap/dist/css/bootstrap.css'
 // import 'font-awesome/css/font-awesome.css'
 // import 'summernote'
 // import 'summernote/dist/lang/summernote-zh-CN.js'
@@ -36,28 +36,24 @@ router.beforeEach((to, from, next) => {
 	let token = localStorage.getItem('token') || '';
 
     //配置接口信息
-    // Axios.defaults.baseURL = 'http://127.0.0.1:18002/';
     Axios.defaults.headers.common['X-huashi-Token'] = token;
-
 	if (!token && to.name !== 'login') {
-		next({
-			path: '/login',
-			query: { redirect: to.fullPath }
-		})
+		next({path: '/login', query: { redirect: to.fullPath }});
 	} else {
-		next()
+		next();
 	}
 });
 
 if (!process.env.IS_WEB) {
-  Vue.use(require('vue-electron'))
+  Vue.use(require('vue-electron'));
 }
-Vue.config.productionTip = false
 
-/* eslint-disable no-new */
+Vue.config.productionTip = false;
+
+
 new Vue({
   components: { App },
   router,
   store,
   template: '<App/>'
-}).$mount('#app')
+}).$mount('#app');
